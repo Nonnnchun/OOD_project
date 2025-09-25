@@ -11,7 +11,17 @@ class Hotel:
    def __init__(self, guestHotel:list =[]):
       self.guestHotel = []
 
-   def shift_All(self,shift_value):
+   def remove_room(self):
+      pass
+
+   def add_room(self,room_num):
+         if(self.guestHotel[-1].guest_count>=room_num or room_num in GuestTravel.manually_added): 
+            print("Already Exist")
+         else:
+            GuestTravel.manually_added.append(room_num)
+            print(f"Added Room {room_num}")
+   
+   def shift_All(self,shift_value:int):
       for guest in self.guestHotel:
          guest.Shift(shift_value)
 
@@ -66,13 +76,15 @@ class Hotel:
             return mid
 
    def search_room(self,room_num):
-      print(self.find_insert(room_num))
-      detial = self.find_path(room_num-self.guestHotel[1].shift,self.guestHotel[1].travel)
-      print((room_num-self.guestHotel[1].shift)+self.guestHotel[1].last_guest_index,end=" ")
+      idx = (self.find_insert(room_num))
+      detial = self.find_path(room_num-self.guestHotel[idx].shift,self.guestHotel[idx].travel)
+      print((room_num-self.guestHotel[idx].shift)+self.guestHotel[idx].last_guest_index,end=" ")
       print(detial[0],detial[1],detial[2],detial[3])
 
-   def remove_room():
-      pass
+   def remove_room(self,room_num:int):
+      print(GuestTravel.deleted_person)
+      
+      
 
    def code_runtime():
       pass
@@ -94,32 +106,24 @@ class Hotel:
    print("9. save to file")
 
 hilbert = Hotel()
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
 hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
 hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
-hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
-hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
-hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
-hilbert.add_guest((1,1,1,10))
-hilbert.add_guest((1,1,1,20))
-hilbert.add_guest((1,1,1,30))
+hilbert.add_room(40)
+hilbert.add_room(40)
+hilbert.add_guest((1,1,1,60))
+def printHotel():
+   for i in GuestTravel.manually_added:
+      if(hilbert.guestHotel[-1].guest_count>=i):
+         GuestTravel.manually_added.remove(i)
+         
+   for i in hilbert.guestHotel:
+      print("guest, room")
+      i.print_index()
+      print(i.shift)
+   
+   print(*GuestTravel.manually_added)
 
-for i in hilbert.guestHotel:
-   print("guest, room")
-   i.print_index()
-   print("addnew_ppl")
-   print(i.shift)
+printHotel()
 
 # hilbert.guestHotel[0].print_index()
 # print("addnew_ppl")
@@ -129,5 +133,3 @@ for i in hilbert.guestHotel:
 # print(hilbert.guestHotel[1].shift)
 # hilbert.guestHotel[2].print_index()
 # print(hilbert.guestHotel[2].shift)
-hilbert.search_room(389)
-hilbert.find_insert(389)

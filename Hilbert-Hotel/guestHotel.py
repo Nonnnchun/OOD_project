@@ -1,12 +1,14 @@
 from typing import List
 
 class GuestTravel:
+    deleted_person = {}
+    manually_added = []
     def __init__(self, first_guest_index: int, travel : List[int]):
         self.last_guest_index = first_guest_index
         self.travel = travel
         self.shift = 0
         self.guest_count = travel[0]*travel[1]*travel[2]*travel[3] +first_guest_index
-        deleted_person = []
+        
 
     def Shift(self, n):
         self.shift += n

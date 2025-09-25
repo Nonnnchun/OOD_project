@@ -1,4 +1,3 @@
-from HashMap import HashMap
 from Hotel import Hotel
 import time
 import tracemalloc
