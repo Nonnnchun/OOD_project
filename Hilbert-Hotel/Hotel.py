@@ -4,15 +4,30 @@
 # import tracemalloc
 from guestHotel import GuestTravel
 import math
+from functools import reduce
 
 
+
+def printHotel():
+   for i in GuestTravel.manually_added:
+      if(hilbert.guestHotel[-1].guest_count>=i):
+         GuestTravel.manually_added.remove(i)
+         
+   for i in hilbert.guestHotel:
+      print("guest, room")
+      i.print_index()
+      print(i.shift)
+   
+   print(*GuestTravel.manually_added)
 
 class Hotel:
    def __init__(self, guestHotel:list =[]):
       self.guestHotel = []
 
-   def remove_room(self):
-      pass
+   def remove_guest(self, guest_id: int):
+      if guest_id in GuestTravel.deleted_guest:
+         print("Delete หาแม่มึงหรอ")
+      GuestTravel.deleted_guest.add(guest_id)
 
    def add_room(self,room_num):
          if(self.guestHotel[-1].guest_count>=room_num or room_num in GuestTravel.manually_added): 
@@ -22,6 +37,9 @@ class Hotel:
             print(f"Added Room {room_num}")
    
    def shift_All(self,shift_value:int):
+      # print(f"KUY {GuestTravel.deleted_guest}")
+      GuestTravel.deleted_guest = set(map(lambda x : x + shift_value, GuestTravel.deleted_guest))
+      # print(f"KUY {GuestTravel.deleted_guest}")
       for guest in self.guestHotel:
          guest.Shift(shift_value)
 
@@ -29,7 +47,7 @@ class Hotel:
       if(len(self.guestHotel)==0):
          self.guestHotel.append(GuestTravel(0,guest))
       else:
-         self.shift_All(guest[0]*guest[1]*guest[2]*guest[3])
+         self.shift_All(reduce(lambda x, y: x + y, guest))
          self.guestHotel.append(GuestTravel(self.guestHotel[-1].guest_count,guest))
 
    def sort_room():
@@ -81,10 +99,6 @@ class Hotel:
       print((room_num-self.guestHotel[idx].shift)+self.guestHotel[idx].last_guest_index,end=" ")
       print(detial[0],detial[1],detial[2],detial[3])
 
-   def remove_room(self,room_num:int):
-      print(GuestTravel.deleted_person)
-      
-      
 
    def code_runtime():
       pass
@@ -106,23 +120,15 @@ class Hotel:
    print("9. save to file")
 
 hilbert = Hotel()
-hilbert.add_guest((1,1,1,10))
+hilbert.add_guest((1,10))
+hilbert.remove_guest(5)
+hilbert.remove_guest(5)
+print(f"KUY {GuestTravel.deleted_guest}")
 hilbert.add_guest((1,1,1,10))
 hilbert.add_room(40)
 hilbert.add_room(40)
 hilbert.add_guest((1,1,1,60))
-def printHotel():
-   for i in GuestTravel.manually_added:
-      if(hilbert.guestHotel[-1].guest_count>=i):
-         GuestTravel.manually_added.remove(i)
-         
-   for i in hilbert.guestHotel:
-      print("guest, room")
-      i.print_index()
-      print(i.shift)
-   
-   print(*GuestTravel.manually_added)
-
+print(f"KUY {GuestTravel.deleted_guest}")
 printHotel()
 
 # hilbert.guestHotel[0].print_index()
