@@ -24,11 +24,6 @@ class Hotel:
    def __init__(self, guestHotel:list =[]):
       self.guestHotel = []
 
-   def remove_guest(self, guest_id: int):
-      if guest_id in GuestTravel.deleted_guest:
-         print("Delete หาแม่มึงหรอ")
-      GuestTravel.deleted_guest.add(guest_id)
-
    def add_room(self,room_num):
          if(self.guestHotel[-1].guest_count>=room_num or room_num in GuestTravel.manually_added): 
             print("Already Exist")
@@ -50,8 +45,17 @@ class Hotel:
          self.shift_All(reduce(lambda x, y: x + y, guest))
          self.guestHotel.append(GuestTravel(self.guestHotel[-1].guest_count,guest))
 
-   def sort_room():
-      pass
+   def print_sorted_room(self):
+      for i in GuestTravel.manually_added:
+         if(self.guestHotel[-1].guest_count>=i):
+            GuestTravel.manually_added.remove(i)
+
+      for i in reversed(self.guestHotel):
+         print("guest, room")
+         i.print_index()
+
+      print("empty " ,end = '')
+      print(*GuestTravel.manually_added)
 
    def find_path(self,room_num,travel):
       if(travel[0]!=1):  
@@ -96,9 +100,12 @@ class Hotel:
    def search_room(self,room_num):
       idx = (self.find_insert(room_num))
       detial = self.find_path(room_num-self.guestHotel[idx].shift,self.guestHotel[idx].travel)
-      print((room_num-self.guestHotel[idx].shift)+self.guestHotel[idx].last_guest_index,end=" ")
+      print((room_num-self.guestHotel[idx].shift)+self.guestHotel[idx].last_guest_index, end = " ")
+      print(idx, end = " ")
       print(detial[0],detial[1],detial[2],detial[3])
 
+   def remove_room(self,room_num:int):
+      print(GuestTravel.deleted_person)
 
    def code_runtime():
       pass
@@ -109,27 +116,33 @@ class Hotel:
    def save_to_file():
       pass
 
-   print("1. add guest")
-   print("2. add guest to room manually")
-   print("3. print sorted room")
-   print("4. print empty room")
-   print("5. search room")
-   print("6. remove room")
-   print("7. print all runtime of code")
-   print("8. print memory used")
-   print("9. save to file")
+#    print("1. add guest")
+#    print("2. add guest to room manually")
+#    print("3. print sorted room")
+#    print("5. search room")
+#    print("6. remove room")
+#    print("7. print all runtime of code")
+#    print("8. print memory used")
+#    print("9. save to file")
 
-hilbert = Hotel()
-hilbert.add_guest((1,10))
-hilbert.remove_guest(5)
-hilbert.remove_guest(5)
-print(f"KUY {GuestTravel.deleted_guest}")
-hilbert.add_guest((1,1,1,10))
-hilbert.add_room(40)
-hilbert.add_room(40)
-hilbert.add_guest((1,1,1,60))
-print(f"KUY {GuestTravel.deleted_guest}")
-printHotel()
+# hilbert = Hotel()
+# hilbert.add_guest((1,1,1,10))
+# hilbert.add_room(40)
+# hilbert.add_room(40)
+# hilbert.add_guest((1,1,1,10))
+# def printHotel():
+#    for i in GuestTravel.manually_added:
+#       if(hilbert.guestHotel[-1].guest_count>=i):
+#          GuestTravel.manually_added.remove(i)
+
+#    for i in hilbert.guestHotel:
+#       print("guest, room")
+#       i.print_index()
+
+#    print("empty " ,end = '')
+#    print(*GuestTravel.manually_added)
+
+# hilbert.print_sorted_room()
 
 # hilbert.guestHotel[0].print_index()
 # print("addnew_ppl")

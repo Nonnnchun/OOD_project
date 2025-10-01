@@ -1,55 +1,53 @@
 from Hotel import Hotel
-import time
-import tracemalloc
 
-all_mem = 0
-all_size = 0
-start_time = time.perf_counter()
-tracemalloc.start()
+control = True
+
 hotel = Hotel()
-initial_guest = int(input("Initial Guest: "))
-for i in range(initial_guest):
-   # hotel.add_room(x,x,x,x)
-   pass
-print("runtime:", hotel.code_runtime())
-while (True) :
+initial_guest = list(map(int, (input("Add initial guest:").split())))
+hotel.add_guest(initial_guest)
+
+while (control) :
    print("============================================")
    print("MENU: ")
-   print("1. add guest")
-   print("2. add guest to room manually")
-   print("6. remove room")
-   print("3. print sorted room")
-   print("5. search room")
-   # print("4. print empty room") --> ไม่ต้อง
-   print("7. print all runtime of code")
-   print("8. print memory used")
-   print("9. save to file")
+   print("1. Add guest")
+   print("2. Add room and people manually")
+   print("3. Print sorted room")
+   print("4. Search room")
+   print("5. Remove room")
+   print("6. Print all code runtime")
+   print("7. Print memory used")
+   print("8. Save to file")
    print("x. exit..")
 
    opt = input("Option: ")
    if opt == '1' :
-      # add ppl
-      pass
+      inp_ppl = list(map(int, (input("Add people to the room: ").split())))
+      hotel.add_guest(inp_ppl)
 
    elif opt == '2' :
-      print("add guest to room manually:", ())
+      hotel.manual_add_guest(int(input("Add room manually: ")))
+
    elif opt == '3' :
-      print("Sorted Rooms:", hotel.sort_rooms())
+      hotel.print_sorted_room()
+
    elif opt == '4' :
-      print("Empty Rooms:", hotel.empty_rooms())
+      hotel.search_room(int(input("Search room : ")))
+
    elif opt == '5' :
       room_number = int(input("room number : "))
-      print("Search room",room_number,":", ())
-   elif opt == '6' :
-      room_number = int(input("room number : "))
       hotel.remove_room(room_number)
-   elif opt == '7' :
+
+   elif opt == '6' :
       print("print all runtime of code:", hotel.code_runtime())
+
+   elif opt == '7' :
+      print(hotel.memory_used())
+
    elif opt == '8' :
-      print(hotel.memory_used(all_mem, all_size))
-   elif opt == '9' :
       hotel.save_to_file("./hotel_rooms.csv")
+
    elif opt == 'x' :
-      break
+      control = False
+
    else :
       print("selection invalid!")
