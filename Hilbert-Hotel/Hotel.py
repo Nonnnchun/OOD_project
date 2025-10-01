@@ -25,6 +25,7 @@ def printHotel():
 class Hotel:
    def __init__(self, guestHotel:list =[]):
       self.guestHotel = []
+      self.tempShift = []
 
    def remove_guest(self, guest_id: int):
       if guest_id in GuestTravel.deleted_guest:
@@ -41,11 +42,15 @@ class Hotel:
          guest.Shift(shift_value)
 
    def add_guest(self,guest:list[int]):
+      new_guest = None
       if(len(self.guestHotel)==0):
-         self.guestHotel.append(GuestTravel(0,guest))
+         new_guest = GuestTravel(0,guest)
       else:
-         self.shift_All(reduce(lambda x, y: x + y, guest))
-         self.guestHotel.append(GuestTravel(self.guestHotel[-1].guest_count,guest))
+         self.shift_All(reduce(lambda x, y: x * y, guest))
+         new_guest = GuestTravel(self.guestHotel[-1].guest_count,guest)
+      self.guestHotel.append(new_guest)
+      # for i in self.tempShift:
+      #    new_guest.Shift(i)
 
    def manual_add_guest(self, room_num):
       # Check if room_id already exists
@@ -53,6 +58,7 @@ class Hotel:
             print("Room is occupied")
       else:
          self.shift_All(room_num)
+         self.tempShift.append(room_num)
          guest_id = "M" + str(len(GuestTravel.manually_added_guest))
          GuestTravel.manually_added_guest[guest_id] = room_num
          print(f"Added Room {room_num}")
@@ -97,10 +103,16 @@ class Hotel:
             lo = mid + 1
          elif mid_val < target:
             hi = mid - 1
-         else:
-            return mid
+         # else:
+         return mid
 
    def search_room(self,room_num):
+      if room_num < self.guestHotel[-1].room_index(self.guestHotel[-1].last_guest_index) - self.guestHotel[-1].last_guest_index:
+         if room_num in GuestTravel.manually_added_guest:
+            print(f"Guest was Manually Added: {GuestTravel.manually_added_guest[room_num]}")
+         else:
+            print(f"Room not found")
+         return
       idx = (self.find_insert(room_num))
       detial = self.find_path(room_num-self.guestHotel[idx].shift,self.guestHotel[idx].travel)
       print((room_num-self.guestHotel[idx].shift)+self.guestHotel[idx].last_guest_index,end=" ")
@@ -137,13 +149,16 @@ hilbert = Hotel()
 # hilbert.manual_add_guest(200)
 # hilbert.manual_add_guest(200)
 # hilbert.manual_add_guest(20215)
-# hilbert.add_guest((1,1,1,10))
-# hilbert.add_guest((1,1,1,60))
+hilbert.add_guest((1,1,1,10))
+hilbert.add_guest((1,1,1,60))
 hilbert.manual_add_guest(200)
-hilbert.manual_add_guest(11)
+# hilbert.manual_add_guest(11)
 
-hilbert.add_guest((1,60))
+hilbert.add_guest((1,1,2,10))
 printHotel()
+# hilbert.search_room(5)
+
+hilbert.search_room(244)
 
 # hilbert.guestHotel[0].print_index()
 # print("addnew_ppl")

@@ -24,44 +24,7 @@ class GuestTravel:
     def print_index(self):
         main_path = []
         print(len(self.travel))
-        if len(self.travel) == 0:
-            for i in range(1):
-                guest_id = i
-                room_index = self.room_index(guest_id)
-                if room_index not in GuestTravel.deleted_guest:
-                    print(guest_id+self.last_guest_index, self.room_index(guest_id))
-        elif len(self.travel) == 1:
-            for j in range(self.travel[0]):
-                offset =  j
-                for i in range(self.guest_count):
-                    guest_id = i + offset
-                    room_index = self.room_index(guest_id)
-                    if room_index not in GuestTravel.deleted_guest:
-                        print(guest_id+self.last_guest_index, self.room_index(guest_id))
-        elif len(self.travel) == 2:
-            for k in range(self.travel[0]):
-                offset_a = k * self.travel[1] 
-                for j in range(self.travel[1]):
-                    offset_b = offset_a + (j)
-                    # print(f"egwgwwg{offset_b}")
-                    for i in range(1):
-                        guest_id = i+offset_b
-                        room_index = self.room_index(guest_id)
-                        if room_index not in GuestTravel.deleted_guest:
-                            print(guest_id+self.last_guest_index, self.room_index(guest_id))
-        elif len(self.travel) == 3:
-            for l in range(self.travel[0]):
-                offset_a = l*self.travel[1]*self.travel[2]
-                for k in range(self.travel[1]):
-                    offset_b = offset_a + k*self.travel[2]
-                    for j in range(self.travel[2]):
-                        offset_c = offset_b + j
-                        for i in range(1):
-                            guest_id = i+ offset_c
-                            room_index = self.room_index(guest_id)
-                            if room_index not in GuestTravel.deleted_guest:
-                                print(guest_id+self.last_guest_index, self.room_index(guest_id))
-        elif len(self.travel) == 4:
+        if len(self.travel) == 4:
             for m in range(self.travel[0]):
                 offset_a = m*self.travel[1]*self.travel[2] * self.travel[3]
                 for l in range(self.travel[1]):
