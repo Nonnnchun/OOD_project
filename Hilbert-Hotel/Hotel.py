@@ -9,16 +9,18 @@ from functools import reduce
 
 
 def printHotel():
-   for i in GuestTravel.manually_added:
-      if(hilbert.guestHotel[-1].guest_count>=i):
-         GuestTravel.manually_added.remove(i)
+   # for i in GuestTravel.manually_added_guest:
+   #    if(hilbert.guestHotel[-1].guest_count>=i):
+   #       GuestTravel.manually_added.remove(i)
          
    for i in hilbert.guestHotel:
       print("guest, room")
       i.print_index()
       print(i.shift)
    
-   print(*GuestTravel.manually_added)
+   print("Manually Added : ", end="")
+   print(*GuestTravel.manually_added_guest.items())
+
 
 class Hotel:
    def __init__(self, guestHotel:list =[]):
@@ -26,19 +28,14 @@ class Hotel:
 
    def remove_guest(self, guest_id: int):
       if guest_id in GuestTravel.deleted_guest:
-         print("Delete หาแม่มึงหรอ")
+         print("Guest already deleted!")
       GuestTravel.deleted_guest.add(guest_id)
 
-   def add_room(self,room_num):
-         if(self.guestHotel[-1].guest_count>=room_num or room_num in GuestTravel.manually_added): 
-            print("Already Exist")
-         else:
-            GuestTravel.manually_added.append(room_num)
-            print(f"Added Room {room_num}")
-   
    def shift_All(self,shift_value:int):
       # print(f"KUY {GuestTravel.deleted_guest}")
       GuestTravel.deleted_guest = set(map(lambda x : x + shift_value, GuestTravel.deleted_guest))
+      for key, value in GuestTravel.manually_added_guest.items():
+         GuestTravel.manually_added_guest[key] = value + shift_value
       # print(f"KUY {GuestTravel.deleted_guest}")
       for guest in self.guestHotel:
          guest.Shift(shift_value)
@@ -49,6 +46,16 @@ class Hotel:
       else:
          self.shift_All(reduce(lambda x, y: x + y, guest))
          self.guestHotel.append(GuestTravel(self.guestHotel[-1].guest_count,guest))
+
+   def manual_add_guest(self, room_num):
+      # Check if room_id already exists
+      if((len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count>=room_num) or room_num in GuestTravel.manually_added_guest.values()): 
+            print("Room is occupied")
+      else:
+         self.shift_All(room_num)
+         guest_id = "M" + str(len(GuestTravel.manually_added_guest))
+         GuestTravel.manually_added_guest[guest_id] = room_num
+         print(f"Added Room {room_num}")
 
    def sort_room():
       pass
@@ -120,15 +127,22 @@ class Hotel:
    print("9. save to file")
 
 hilbert = Hotel()
-hilbert.add_guest((1,10))
-hilbert.remove_guest(5)
-hilbert.remove_guest(5)
-print(f"KUY {GuestTravel.deleted_guest}")
-hilbert.add_guest((1,1,1,10))
-hilbert.add_room(40)
-hilbert.add_room(40)
-hilbert.add_guest((1,1,1,60))
-print(f"KUY {GuestTravel.deleted_guest}")
+# hilbert.add_guest((1,10))
+# hilbert.remove_guest(5)
+# hilbert.remove_guest(5)
+# print(f"KUY {GuestTravel.deleted_guest}")
+# hilbert.add_guest((1,1,1,10))
+# hilbert.add_guest((1,1,1,60))
+# print(f"KUY {GuestTravel.deleted_guest}")
+# hilbert.manual_add_guest(200)
+# hilbert.manual_add_guest(200)
+# hilbert.manual_add_guest(20215)
+# hilbert.add_guest((1,1,1,10))
+# hilbert.add_guest((1,1,1,60))
+hilbert.manual_add_guest(200)
+hilbert.manual_add_guest(11)
+
+hilbert.add_guest((1,60))
 printHotel()
 
 # hilbert.guestHotel[0].print_index()

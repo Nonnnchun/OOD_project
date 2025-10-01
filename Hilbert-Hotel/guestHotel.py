@@ -4,7 +4,7 @@ from functools import reduce
 
 class GuestTravel:
     deleted_guest = set()
-    manually_added = []
+    manually_added_guest = {}
     def __init__(self, first_guest_index: int, travel : List[int]):
         self.last_guest_index = first_guest_index
         self.travel = travel
