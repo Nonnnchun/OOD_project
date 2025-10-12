@@ -1,6 +1,5 @@
 import tracemalloc
 from guestHotel import GuestTravel
-import math
 from functools import reduce
 import time
 
@@ -95,41 +94,37 @@ class Hotel:
       print("=" * 60 + "\n")
 
    def find_path(self, room_num, travel):
-    if room_num == 0:
-        return 1, 1, 1, 1
-    
-    
-    room_idx = room_num 
-    
-    if travel[0] != 1:  
-        quay = (room_idx // (travel[1] * travel[2] * travel[3])) + 1
-        quay_seat = room_idx % (travel[1] * travel[2] * travel[3])
-        
-        boat = (quay_seat // (travel[2] * travel[3])) + 1
-        boat_seat = quay_seat % (travel[2] * travel[3])
-        
-        bus = (boat_seat // travel[3]) + 1
-        bus_seat = (boat_seat % travel[3]) + 1  
-        
-        return quay, boat, bus, bus_seat
-    
-    elif travel[1] != 1:
-        boat = (room_idx // (travel[2] * travel[3])) + 1
-        boat_seat = room_idx % (travel[2] * travel[3])
-        
-        bus = (boat_seat // travel[3]) + 1
-        bus_seat = (boat_seat % travel[3]) + 1
-        
-        return 1, boat, bus, bus_seat
-    
-    elif travel[2] != 1:
-        bus = (room_idx // travel[3]) + 1
-        bus_seat = (room_idx % travel[3]) + 1
-        
-        return 1, 1, bus, bus_seat
-    
-    elif travel[3] != 1:
-        return 1, 1, 1, room_num
+      if room_num == 0:
+         return 1, 1, 1, 1
+
+      room_idx = room_num 
+
+      if travel[0] != 1:  
+         quay = (room_idx // (travel[1] * travel[2] * travel[3])) + 1
+         quay_seat = room_idx % (travel[1] * travel[2] * travel[3])
+
+         boat = (quay_seat // (travel[2] * travel[3])) + 1
+         boat_seat = quay_seat % (travel[2] * travel[3])
+
+         bus = (boat_seat // travel[3]) + 1
+         bus_seat = (boat_seat % travel[3]) + 1 
+         return quay, boat, bus, bus_seat
+
+      elif travel[1] != 1:
+         boat = (room_idx // (travel[2] * travel[3])) + 1
+         boat_seat = room_idx % (travel[2] * travel[3])
+
+         bus = (boat_seat // travel[3]) + 1
+         bus_seat = (boat_seat % travel[3]) + 1
+         return 1, boat, bus, bus_seat
+
+      elif travel[2] != 1:
+         bus = (room_idx // travel[3]) + 1
+         bus_seat = (room_idx % travel[3]) + 1
+         return 1, 1, bus, bus_seat
+
+      elif travel[3] != 1:
+         return 1, 1, 1, room_num
 
    def find_insert(self, target: int) -> int:
       if not self.guestHotel:
