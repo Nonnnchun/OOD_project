@@ -42,6 +42,11 @@ class Hotel:
          guest.Shift(shift_value)
 
    def add_guest(self, guest:list[int]):
+      for g in guest:
+        if g < 0:
+            return "❌ Invalid Input"
+      if(len(guest) !=4):
+         return "❌ Invalid Input"
       if(len(self.guestHotel) == 0):
          new_guest = GuestTravel(0, guest)
          self.shift_TheManuallyAdded(reduce(lambda x, y: x * y, guest))
@@ -58,7 +63,9 @@ class Hotel:
    def manual_add_guest(self, room_num):
       if(room_num in GuestTravel.deleted_guest):
          print("❌ Room is already destroyed!")
+      print(self.guestHotel[-1].guest_count,room_num)
       if((len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count >= room_num) or room_num in GuestTravel.manually_added_guest.values()): 
+         
          print("❌ Room is already occupied!")
       else:
          guest_id = "M" + str(len(GuestTravel.manually_added_guest))
@@ -95,41 +102,15 @@ class Hotel:
       print("=" * 60 + "\n")
 
    def find_path(self, room_num, travel):
-    if room_num == 0:
-        return 1, 1, 1, 1
-    
-    
-    room_idx = room_num 
-    
-    if travel[0] != 1:  
-        quay = (room_idx // (travel[1] * travel[2] * travel[3])) + 1
-        quay_seat = room_idx % (travel[1] * travel[2] * travel[3])
-        
-        boat = (quay_seat // (travel[2] * travel[3])) + 1
-        boat_seat = quay_seat % (travel[2] * travel[3])
-        
-        bus = (boat_seat // travel[3]) + 1
-        bus_seat = (boat_seat % travel[3]) + 1  
-        
-        return quay, boat, bus, bus_seat
-    
-    elif travel[1] != 1:
-        boat = (room_idx // (travel[2] * travel[3])) + 1
-        boat_seat = room_idx % (travel[2] * travel[3])
-        
-        bus = (boat_seat // travel[3]) + 1
-        bus_seat = (boat_seat % travel[3]) + 1
-        
-        return 1, boat, bus, bus_seat
-    
-    elif travel[2] != 1:
-        bus = (room_idx // travel[3]) + 1
-        bus_seat = (room_idx % travel[3]) + 1
-        
-        return 1, 1, bus, bus_seat
-    
-    elif travel[3] != 1:
-        return 1, 1, 1, room_num
+    room_idx = room_num
+    seat = (room_idx % travel[3]) + 1
+    room_idx //= travel[3]
+    bus = (room_idx % travel[2]) + 1
+    room_idx //= travel[2]
+    boat = (room_idx % travel[1]) + 1
+    room_idx //= travel[1]
+    quay = (room_idx % travel[0]) + 1
+    return quay, boat, bus, seat
 
    def find_insert(self, target: int) -> int:
       if not self.guestHotel:
