@@ -48,7 +48,6 @@ def main():
          except:
             print()
             print("❌ Invalid Input".center(20))
-        
       elif opt == '2':
          inp_mul = int(input("➤  Enter room number: "))
          try:
