@@ -29,8 +29,24 @@ def main():
    print("   Example: 2 3 4 5")
    print("-" * 60)
 
-   initial_guest = list(map(int, input("➤  Initial guest: ").split()))
+   INPUT_INITIAL = True
+   while INPUT_INITIAL:
+      try:
+         initial_guest = list(map(int, input("➤  Initial guest: ").split()))
+         if len(initial_guest) != 4:
+            print("❌ Please enter exactly 4 numbers.")
+            continue
+
+         if any(i <= 0 for i in initial_guest):
+            print("❌ Error Input! All numbers must be positive.")
+            continue
+
+         INPUT_INITIAL = False
+      except ValueError:
+         print("❌ Invalid input! Please enter only numbers separated by spaces.")
+
    hotel.add_guest(initial_guest)
+
 
    while control:
       print_menu()
@@ -40,12 +56,27 @@ def main():
       if opt == '1':
          print("📝 Enter guest configuration (4 numbers)")
          print("   Example: 2 3 4 5")
-         inp_ppl = list(map(int, input("➤  Guest configuration: ").split()))
-         hotel.code_runtime(hotel.add_guest, inp_ppl)
-
+         try:
+            inp_ppl = list(map(int, input("➤  Guest configuration: ").split()))
+            if len(inp_ppl) != 4:
+               print("❌ Please enter exactly 4 numbers.")
+               continue
+            if any(i <= 0 for i in inp_ppl):
+               print("❌ Error Input! All numbers must be positive.")
+               continue
+            hotel.code_runtime(hotel.add_guest, inp_ppl)
+         except ValueError:
+            print("❌ Invalid input! Please enter only numbers separated by spaces.")
+            
       elif opt == '2':
-         inp_mul = int(input("➤  Enter room number: "))
-         hotel.code_runtime(hotel.manual_add_guest, inp_mul)
+            try:
+               inp_mul = int(input("➤  Enter room number: "))
+               if inp_mul <= 0:
+                  print("❌ Room number must be a positive integer.")
+                  continue
+               hotel.code_runtime(hotel.manual_add_guest, inp_mul)
+            except ValueError:
+               print("❌ Invalid input! Please enter a valid number.")
 
       elif opt == '3':
          hotel.code_runtime(hotel.print_sorted_room)
