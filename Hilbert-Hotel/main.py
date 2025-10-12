@@ -28,10 +28,12 @@ def main():
    print("   (Format: 4 numbers separated by spaces)")
    print("   Example: 2 3 4 5")
    print("-" * 60)
-
-   initial_guest = list(map(int, input("➤  Initial guest: ").split()))
-   hotel.add_guest(initial_guest)
-
+   error = "h"
+   while(error):
+      initial_guest = list(map(int, input("➤  Initial guest: ").split()))
+      error = hotel.add_guest(initial_guest)
+      if(error):
+         print(error)
    while control:
       print_menu()
       opt = input("\n➤  Select option: ").strip()
@@ -40,13 +42,20 @@ def main():
       if opt == '1':
          print("📝 Enter guest configuration (4 numbers)")
          print("   Example: 2 3 4 5")
-         inp_ppl = list(map(int, input("➤  Guest configuration: ").split()))
-         hotel.code_runtime(hotel.add_guest, inp_ppl)
-
+         try:
+            inp_ppl = list(map(int, input("➤  Guest configuration: ").split()))
+            hotel.code_runtime(hotel.add_guest, inp_ppl)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
+        
       elif opt == '2':
          inp_mul = int(input("➤  Enter room number: "))
-         hotel.code_runtime(hotel.manual_add_guest, inp_mul)
-
+         try:
+            hotel.code_runtime(hotel.manual_add_guest, inp_mul)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
       elif opt == '3':
          hotel.code_runtime(hotel.print_sorted_room)
 
@@ -56,10 +65,19 @@ def main():
          #    hotel.search_room(i)
          search_room = int(input("➤  Enter room number to search: "))
          hotel.code_runtime(hotel.search_room, search_room)
-
+         try:
+            hotel.code_runtime(hotel.manual_add_guest, inp_mul)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
       elif opt == '5':
          guest_number = int(input("➤  Enter room number to remove: "))
          hotel.code_runtime(hotel.remove_room, guest_number)
+         try:
+            hotel.code_runtime(hotel.manual_add_guest, inp_mul)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
 
       elif opt == '6':
          hotel.print_total_runtime()

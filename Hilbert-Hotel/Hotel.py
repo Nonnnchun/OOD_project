@@ -42,6 +42,11 @@ class Hotel:
          guest.Shift(shift_value)
 
    def add_guest(self, guest:list[int]):
+      for g in guest:
+        if g < 0:
+            return "❌ Invalid Input"
+      if(len(guest) !=4):
+         return "❌ Invalid Input"
       if(len(self.guestHotel) == 0):
          new_guest = GuestTravel(0, guest)
          self.shift_TheManuallyAdded(reduce(lambda x, y: x * y, guest))
