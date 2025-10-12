@@ -2,7 +2,7 @@ from typing import List
 from functools import reduce
 
 class GuestTravel:
-    deleted_guest = set()
+    # deleted_guest = set()
     deleted_room = set()
     manually_added_guest = {}
     def __init__(self, first_guest_index: int, travel : List[int]):
@@ -34,7 +34,7 @@ class GuestTravel:
                             for i in range(1):
                                 guest_id = i + offset_d
                                 room_index = self.room_index(guest_id)
-                                if guest_id not in GuestTravel.deleted_guest and room_index not in self.deleted_room:
+                                if room_index not in self.deleted_room:
                                     final_guest_id = guest_id + self.last_guest_index
                                     guests_data.append((final_guest_id, room_index))
         for guest_id, room_num in guests_data:

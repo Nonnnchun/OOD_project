@@ -47,7 +47,6 @@ def main():
 
    hotel.add_guest(initial_guest)
 
-
    while control:
       print_menu()
       opt = input("\n➤  Select option: ").strip()
@@ -82,12 +81,23 @@ def main():
          hotel.code_runtime(hotel.print_sorted_room)
 
       elif opt == '4':
-         search_room = int(input("➤  Enter room number to search: "))
-         hotel.code_runtime(hotel.search_room, search_room)
+         # # debugging
+         # for i in range(hotel.guestHotel[-1].guest_count):
+         #    hotel.search_room(i)
+         try:
+            search_room = int(input("➤  Enter room number to search: "))
+            hotel.code_runtime(hotel.search_room, search_room)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
 
       elif opt == '5':
          guest_number = int(input("➤  Enter room number to remove: "))
-         hotel.code_runtime(hotel.remove_room, guest_number)
+         try:
+            hotel.code_runtime(hotel.remove_room, guest_number)
+         except:
+            print()
+            print("❌ Invalid Input".center(20))
 
       elif opt == '6':
          hotel.print_total_runtime()

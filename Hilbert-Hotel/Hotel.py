@@ -11,12 +11,12 @@ class Hotel:
       self.travel = 0
       self.total_runtime = 0
 
-   def remove_guest(self, guest_id: int):
-      if guest_id in GuestTravel.deleted_guest:
-         print("❌ Guest already deleted!")
-         return
-      GuestTravel.deleted_guest.add(guest_id)
-      print(f"✅ Successfully removed guest from room {guest_id}")
+   # def remove_guest(self, guest_id: int):
+   #    if guest_id in GuestTravel.deleted_guest:
+   #       print("❌ Guest already deleted!")
+   #       return
+   #    GuestTravel.deleted_guest.add(guest_id)
+   #    print(f"✅ Successfully removed guest from room {guest_id}")
 
    def remove_room(self, room_id: int):
       if room_id in GuestTravel.deleted_room:
@@ -56,7 +56,10 @@ class Hotel:
       print(f"   Travel configuration: {guest}")
 
    def manual_add_guest(self, room_num):
-      if((len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count >= room_num) or room_num in GuestTravel.manually_added_guest.values()): 
+      if(room_num in GuestTravel.deleted_room):
+         print("❌ Room is already destroyed!")
+         return
+      if((len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count-1 >= room_num) or room_num in GuestTravel.manually_added_guest.values()): 
          print("❌ Room is already occupied!")
       else:
          guest_id = "M" + str(len(GuestTravel.manually_added_guest))
@@ -93,29 +96,15 @@ class Hotel:
       print("=" * 60 + "\n")
 
    def find_path(self, room_num, travel):
-      if(room_num == 0):
-         return 1, 1, 1, 1
-      if(travel[0] != 1):  
-         quay = math.ceil((room_num/(travel[1]*travel[2]*travel[3])))
-         quay_seat = room_num % (travel[1]*travel[2]*travel[3])
-         boat = math.ceil(quay_seat/(travel[2]*travel[3]))
-         boat_seat = quay_seat % (travel[2]*travel[3])
-         bus = math.ceil(boat_seat/travel[3])
-         bus_seat = boat_seat % travel[3]
-         return quay, boat, bus, bus_seat+1
-      elif(travel[1] != 1):
-         quay_seat = 1 
-         boat = math.ceil(room_num/(travel[2]*travel[3]))
-         boat_seat = room_num % (travel[2]*travel[3])
-         bus = math.ceil(boat_seat/travel[3])
-         bus_seat = boat_seat % travel[3]
-         return 1, boat, bus, bus_seat+1
-      elif(travel[2] != 1):
-         bus = math.ceil(room_num/travel[3])
-         bus_seat = room_num % travel[3]
-         return 1, 1, bus, bus_seat+1
-      elif(travel[3] != 1):
-         return 1, 1, 1, room_num+1
+      room_idx = room_num
+      seat = (room_idx % travel[3]) + 1
+      room_idx //= travel[3]
+      bus = (room_idx % travel[2]) + 1
+      room_idx //= travel[2]
+      boat = (room_idx % travel[1]) + 1
+      room_idx //= travel[1]
+      quay = (room_idx % travel[0]) + 1
+      return quay, boat, bus, seat
 
    def find_insert(self, target: int) -> int:
       if not self.guestHotel:
@@ -136,7 +125,12 @@ class Hotel:
    def search_room(self, room_num):
       print(f"\n🔍 Searching for room {room_num}...")
       print("-" * 50)
-
+      if room_num in GuestTravel.deleted_room:
+         print(f"\n❌ Room Deleted!")
+         print(f"   Room Number   : {room_num}")
+         print(f"   Type          : Manually Deleted")
+         print("-" * 50 + "\n")
+         return
       if room_num in GuestTravel.manually_added_guest.values():
          keys = [key for key, val in GuestTravel.manually_added_guest.items() if val == room_num]
          print(f"\n✅ Room Found!")
@@ -146,7 +140,7 @@ class Hotel:
          print("-" * 50 + "\n")
          return
 
-      if(room_num > self.guestHotel[-1].guest_count):
+      if(room_num > self.guestHotel[-1].guest_count-1):
          print(f"\n❌ Room {room_num} not found in hotel!")
          print("-" * 50 + "\n")
          return
@@ -159,7 +153,7 @@ class Hotel:
       print(f"\n✅ Room Found!")
       print(f"   Guest ID      : {guest_id}")
       print(f"   Room Number   : {room_num}")
-      print(f"   Group Index   : {idx}")
+      print(f"   Group Index   : {idx+1}")
       print(f"   Travel Path   : Quay {detail[0]}, Boat {detail[1]}, Bus {detail[2]}, Seat {detail[3]}")
       print("-" * 50 + "\n")
 
@@ -201,7 +195,7 @@ class Hotel:
                            offset_d = offset_c + j
                            guest_id = offset_d
                            room_index = group.room_index(guest_id)
-                           if guest_id not in GuestTravel.deleted_guest and room_index not in GuestTravel.deleted_room:
+                           if room_index not in GuestTravel.deleted_room:
                               final_guest_id = guest_id + group.last_guest_index
                               travel_path = f"({m+1},{l+1},{k+1},{j+1})"
                               all_data.append({
