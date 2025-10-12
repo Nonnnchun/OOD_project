@@ -51,6 +51,9 @@ def main():
          hotel.code_runtime(hotel.print_sorted_room)
 
       elif opt == '4':
+         # debugging
+         # for i in range(hotel.guestHotel[-1].guest_count):
+         #    hotel.search_room(i)
          search_room = int(input("➤  Enter room number to search: "))
          hotel.code_runtime(hotel.search_room, search_room)
 
