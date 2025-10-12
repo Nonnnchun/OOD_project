@@ -113,7 +113,6 @@ class Hotel:
 
          bus = (boat_seat // travel[3]) + 1
          bus_seat = (boat_seat % travel[3]) + 1  
-
          return quay, boat, bus, bus_seat
 
       elif travel[1] != 1:
@@ -122,13 +121,11 @@ class Hotel:
 
          bus = (boat_seat // travel[3]) + 1
          bus_seat = (boat_seat % travel[3]) + 1
-
          return 1, boat, bus, bus_seat
 
       elif travel[2] != 1:
          bus = (room_idx // travel[3]) + 1
          bus_seat = (room_idx % travel[3]) + 1
-
          return 1, 1, bus, bus_seat
 
       elif travel[3] != 1:
