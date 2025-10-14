@@ -19,18 +19,23 @@ class Hotel:
                if v == room_id:
                   del GuestTravel.manually_added_guest[k]
                   break
-      GuestTravel.deleted_room.add(room_id)
+      GuestTravel.deleted_room.append(room_id)
       print(f"✅ Successfully removed room {room_id}")
 
    def shift_TheManuallyAdded(self, shift_value):
+      for i in range(len(GuestTravel.manually_added_guest_deleted)):
+         GuestTravel.manually_added_guest_deleted[i] += shift_value
       for key, value in GuestTravel.manually_added_guest.items():
          GuestTravel.manually_added_guest[key] = value + shift_value
 
    def shift_All(self, shift_value: int):
       self.tempShift.append(shift_value)
+
       self.shift_TheManuallyAdded(shift_value)
       for guest in self.guestHotel:
          guest.Shift(shift_value)
+      for i in range(len(guest.deleted_room)):
+         guest.deleted_room[i] += shift_value
 
    def add_guest(self, guest: list[int]):
       if len(self.guestHotel) == 0:
@@ -48,11 +53,15 @@ class Hotel:
       print(f"   Dimensions: {len(guest)}")
 
    def manual_add_guest(self, room_num):
+      room = False
       if room_num in GuestTravel.deleted_room:
-         print("❌ Room is already destroyed!")
-         return
-      if (len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count - 1 >= room_num) or room_num in GuestTravel.manually_added_guest.values():
+         # GuestTravel.deleted_room.remove(room_num)
+         GuestTravel.manually_added_guest_deleted.append(room_num)
+         room = True
+      if not room and (len(self.guestHotel) > 0 and self.guestHotel[-1].guest_count - 1 >= room_num) or room_num in GuestTravel.manually_added_guest.values():
          print("❌ Room is already occupied!")
+         return
+
       else:
          guest_id = "M" + str(len(GuestTravel.manually_added_guest))
          GuestTravel.manually_added_guest[guest_id] = room_num
@@ -91,8 +100,6 @@ class Hotel:
    def find_path(self, room_num, travel):
       room_idx = room_num
       path = []
-      
-      # Work backwards through dimensions
       for i in range(len(travel) - 1, -1, -1):
          position = (room_idx % travel[i]) + 1
          path.append(position)
@@ -132,12 +139,7 @@ class Hotel:
    def search_room(self, room_num):
       print(f"\n🔍 Searching for room {room_num}...")
       print("-" * 50)
-      if room_num in GuestTravel.deleted_room:
-         print(f"\n❌ Room Deleted!")
-         print(f"   Room Number   : {room_num}")
-         print(f"   Type          : Manually Deleted")
-         print("-" * 50 + "\n")
-         return
+
       if room_num in GuestTravel.manually_added_guest.values():
          keys = [key for key, val in GuestTravel.manually_added_guest.items() if val == room_num]
          print(f"\n✅ Room Found!")
@@ -146,7 +148,12 @@ class Hotel:
          print(f"   Type          : Manual")
          print("-" * 50 + "\n")
          return
-
+      if room_num in GuestTravel.deleted_room:
+         print(f"\n❌ Room Deleted!")
+         print(f"   Room Number   : {room_num}")
+         print(f"   Type          : Manually Deleted")
+         print("-" * 50 + "\n")
+         return
       if room_num > self.guestHotel[-1].guest_count - 1:
          print(f"\n❌ Room {room_num} not found in hotel!")
          print("-" * 50 + "\n")
