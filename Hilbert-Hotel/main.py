@@ -33,9 +33,6 @@ def main():
    while INPUT_INITIAL:
       try:
          initial_guest = list(map(int, input("➤  Initial guest: ").split()))
-         if len(initial_guest) != 4:
-            print("❌ Please enter exactly 4 numbers.")
-            continue
 
          if any(i <= 0 for i in initial_guest):
             print("❌ Error Input! All numbers must be positive.")
@@ -53,13 +50,10 @@ def main():
       print()
 
       if opt == '1':
-         print("📝 Enter guest configuration (4 numbers)")
+         print("📝 Enter guest configuration ")
          print("   Example: 2 3 4 5")
          try:
             inp_ppl = list(map(int, input("➤  Guest configuration: ").split()))
-            if len(inp_ppl) != 4:
-               print("❌ Please enter exactly 4 numbers.")
-               continue
             if any(i <= 0 for i in inp_ppl):
                print("❌ Error Input! All numbers must be positive.")
                continue
