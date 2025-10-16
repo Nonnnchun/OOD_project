@@ -39,7 +39,7 @@ def main():
                 print("❌ Error! All bus capacities must be positive.")
                 continue
 
-            INPUT_INITIAL = Falsez
+            INPUT_INITIAL = False
         except ValueError:
             print("❌ Invalid input! Please use format: 10/9/8/7")
 

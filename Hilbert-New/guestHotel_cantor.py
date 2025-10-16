@@ -1,7 +1,7 @@
 from typing import List
 
 class GuestTravel:
-    def init(self, group_id: int, buses: List[int]):
+    def __init__(self, group_id: int, buses: List[int]):
         self.group_id = group_id
         self.buses = buses
         self.total_guests = sum(buses)
