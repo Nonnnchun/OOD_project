@@ -31,6 +31,12 @@ class Hotel:
             room_num = new_group.get_room_number(guest_index)
             self.room_to_guest[room_num] = (group_id, guest_index)
         
+        new_manual = dict()
+        for guest in self.manual_guests.values():
+            room_num = new_group.triple_pair(0,0,int(guest[1:]))
+            new_manual[room_num] = guest
+        self.manual_guests = new_manual
+        
         total_guests = new_group.total_guests
         print(f"\n✅ Added {total_guests} guests successfully!")
         print(f"   Bus configuration: {buses}")
@@ -111,7 +117,7 @@ class Hotel:
             })
         
         
-        all_rooms.sort(key=lambda x: x['room'])
+        timsort(all_rooms, key=lambda x: x['room'])
         
         print(f"\n{'Guest ID':<12} {'Room':<12} {'Group':<8} {'Bus':<8} {'Seat':<8} {'Type':<8}")
         print("-" * 70)
@@ -227,8 +233,7 @@ class Hotel:
                     'type': 'Manual'
                 })
                 
-            all_data.sort(key=lambda x: int(x['room_num']))
-            
+            timsort(all_data, key=lambda x: int(x['room_num']))
             
             with open(filename + '.csv', 'w', encoding='utf-8') as f:
                 
@@ -244,3 +249,58 @@ class Hotel:
         
         except IOError as e:
             print(f"\n❌ Error saving file: {e}")
+            
+def insertion_sort(arr, left, right, key):
+    """Simple insertion sort used on small subarrays (runs)."""
+    for i in range(left + 1, right + 1):
+        temp = arr[i]
+        j = i - 1
+        while j >= left and key(arr[j]) > key(temp):
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = temp
+
+
+def merge(arr, l, m, r, key):
+    """Merge two sorted subarrays arr[l:m] and arr[m:r]."""
+    left = arr[l:m]
+    right = arr[m:r]
+    i = j = 0
+    k = l
+
+    while i < len(left) and j < len(right):
+        if key(left[i]) <= key(right[j]):
+            arr[k] = left[i]
+            i += 1
+        else:
+            arr[k] = right[j]
+            j += 1
+        k += 1
+
+    while i < len(left):
+        arr[k] = left[i]
+        i += 1
+        k += 1
+    while j < len(right):
+        arr[k] = right[j]
+        j += 1
+        k += 1
+
+
+def timsort(arr, key=lambda x: x, min_run=32):
+    """Perform Timsort on arr using given key function."""
+    n = len(arr)
+
+    # Step 1: Sort small subarrays (runs) using insertion sort
+    for start in range(0, n, min_run):
+        end = min(start + min_run - 1, n - 1)
+        insertion_sort(arr, start, end, key)
+
+    # Step 2: Merge sorted runs
+    size = min_run
+    while size < n:
+        for left in range(0, n, 2 * size):
+            mid = min(n, left + size)
+            right = min((left + 2 * size), n)
+            merge(arr, left, mid, right, key)
+        size *= 2
